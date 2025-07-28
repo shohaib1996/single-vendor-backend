@@ -6,6 +6,11 @@ const router = express.Router();
 import { CategoryRoutes } from '../modules/category/category.routes';
 import { BrandRoutes } from '../modules/brand/brand.routes';
 import { ProductRoutes } from '../modules/product/product.routes';
+import { OrderRoutes } from '../modules/order/order.routes';
+import { PaymentRoutes } from '../modules/payment/payment.routes';
+import { ReviewRoutes } from '../modules/review/review.routes';
+import { ProductQuestionRoutes } from '../modules/productQuestion/productQuestion.routes';
+import { ProductAnswerRoutes } from '../modules/productAnswer/productAnswer.routes';
 
 const moduleRoutes = [
   {
@@ -23,6 +28,26 @@ const moduleRoutes = [
   {
     path: '/products',
     route: ProductRoutes,
+  },
+  {
+    path: '/orders',
+    route: OrderRoutes,
+  },
+  {
+    path: '/payment',
+    route: PaymentRoutes,
+  },
+  {
+    path: '/reviews',
+    route: ReviewRoutes,
+  },
+  {
+    path: '/product-questions',
+    route: ProductQuestionRoutes,
+  },
+  {
+    path: '/product-answers',
+    route: ProductAnswerRoutes,
   },
 ];
 
