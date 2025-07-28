@@ -1,0 +1,189 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum FilterType {
+  TEXT
+  NUMBER
+  BOOLEAN
+  DROPDOWN
+  RANGE
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+
+  orders    Order[]
+  reviews   Review[]
+  questions ProductQuestion[]
+  answers   ProductAnswer[]
+}
+
+model Category {
+  id        String     @id @default(uuid())
+  name      String
+  slug      String     @unique
+  parentId  String?
+  parent    Category?  @relation("CategoryParent", fields: [parentId], references: [id])
+  children  Category[] @relation("CategoryParent")
+  products  Product[]
+  filters   FilterOption[]
+}
+
+model Brand {
+  id        String    @id @default(uuid())
+  name      String
+  products  Product[]
+}
+
+model Product {
+  id           String     @id @default(uuid())
+  name         String
+  description  String
+  price        Float
+  stock        Int
+  images       String[]   // URLs
+  featured     Boolean    @default(false)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  // Discount
+  isDiscountActive   Boolean @default(false)
+  discountPercentage Float?
+  discountedPrice    Float?
+  discountValidUntil DateTime?
+
+  // Category and Brand
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
+  brand      Brand?    @relation(fields: [brandId], references: [id])
+  brandId    String?
+
+  // Relations
+  specifications ProductSpecification[]
+  reviews        Review[]
+  orderItems     OrderItem[]
+  questions      ProductQuestion[]
+}
+
+model ProductSpecification {
+  id        String   @id @default(uuid())
+  key       String
+  value     String
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+}
+
+model FilterOption {
+  id         String     @id @default(uuid())
+  category   Category   @relation(fields: [categoryId], references: [id])
+  categoryId String
+
+  name       String
+  type       FilterType   @default(TEXT)
+  options    String[]     @default([])
+  unit       String?
+}
+
+model ProductQuestion {
+  id        String   @id @default(uuid())
+  question  String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+
+  answer    ProductAnswer?
+}
+
+model ProductAnswer {
+  id         String          @id @default(uuid())
+  answer     String
+  createdAt  DateTime        @default(now())
+
+  question   ProductQuestion @relation(fields: [questionId], references: [id])
+  questionId String          @unique
+
+  admin      User            @relation(fields: [adminId], references: [id])
+  adminId    String
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+}
+
+model Order {
+  id         String       @id @default(uuid())
+  user       User         @relation(fields: [userId], references: [id])
+  userId     String
+  status     OrderStatus  @default(PENDING)
+  total      Float
+  createdAt  DateTime     @default(now())
+
+  orderItems OrderItem[]
+  payment    Payment?
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  order     Order    @relation(fields: [orderId], references: [id])
+  orderId   String
+
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+
+  quantity  Int
+  price     Float
+}
+
+model Payment {
+  id        String        @id @default(uuid())
+  order     Order         @relation(fields: [orderId], references: [id])
+  orderId   String        @unique
+
+  status    PaymentStatus @default(PENDING)
+  method    String?
+  paidAt    DateTime?
+}
