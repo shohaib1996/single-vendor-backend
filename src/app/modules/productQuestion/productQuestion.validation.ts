@@ -2,15 +2,12 @@ import { z } from 'zod';
 
 const createProductQuestionZodSchema = z.object({
   body: z.object({
-    question: z.string({
-      required_error: 'Question is required',
-    }),
-    userId: z.string({
-      required_error: 'User ID is required',
-    }),
-    productId: z.string({
-      required_error: 'Product ID is required',
-    }),
+    question: z.string()
+      .min(1, { message: 'Question is required' }),
+    userId: z.string()
+      .min(1, { message: 'User ID is required' }),
+    productId: z.string()
+      .min(1, { message: 'Product ID is required' }),
   }),
 });
 

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-import catchAsync from '../../../utils/catchAsync';
+
 import { ProductQuestionServices } from './productQuestion.services';
+import catchAsync from '../../utils/catchAsync';
 
 const createProductQuestion = catchAsync(async (req: Request, res: Response) => {
   const result = await ProductQuestionServices.createProductQuestion(req.body);

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import catchAsync from '../../../utils/catchAsync';
+import catchAsync from '../../utils/catchAsync';
 import { ProductAnswerServices } from './productAnswer.services';
 
 const createProductAnswer = catchAsync(async (req: Request, res: Response) => {
