@@ -3,14 +3,25 @@ import { IBrand } from './brand.interface';
 import { ApiError } from '../../errors/ApiError';
 
 const createBrandIntoDB = async (payload: IBrand) => {
+  const { categoryIds, ...brandData } = payload;
+
   const result = await prisma.brand.create({
-    data: payload,
+    data: {
+      ...brandData,
+      categories: {
+        connect: categoryIds?.map(id => ({ id }))
+      }
+    },
   });
   return result;
 };
 
 const getAllBrands = async () => {
-  const result = await prisma.brand.findMany();
+  const result = await prisma.brand.findMany({
+    include: {
+      categories: true,
+    },
+  });
   return result;
 };
 
@@ -19,11 +30,16 @@ const getSingleBrand = async (id: string) => {
     where: {
       id,
     },
+    include: {
+      categories: true,
+    },
   });
   return result;
 };
 
 const updateBrand = async (id: string, payload: Partial<IBrand>) => {
+  const { categoryIds, ...brandData } = payload;
+
   const isExist = await prisma.brand.findUnique({
     where: {
       id,
@@ -38,7 +54,12 @@ const updateBrand = async (id: string, payload: Partial<IBrand>) => {
     where: {
       id,
     },
-    data: payload,
+    data: {
+      ...brandData,
+      categories: {
+        set: categoryIds?.map(id => ({ id }))
+      }
+    },
   });
   return result;
 };

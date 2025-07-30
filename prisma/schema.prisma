@@ -60,12 +60,14 @@ model Category {
   children  Category[] @relation("CategoryParent")
   products  Product[]
   filters   FilterOption[]
+  brands    Brand[]
 }
 
 model Brand {
-  id        String    @id @default(uuid())
-  name      String
-  products  Product[]
+  id         String     @id @default(uuid())
+  name       String
+  products   Product[]
+  categories Category[]
 }
 
 model Product {
