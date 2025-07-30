@@ -47,6 +47,8 @@ model User {
   reviews   Review[]
   questions ProductQuestion[]
   answers   ProductAnswer[]
+  wishlist  Wishlist[]
+  cart      Cart?
 }
 
 model Category {
@@ -94,6 +96,8 @@ model Product {
   reviews        Review[]
   orderItems     OrderItem[]
   questions      ProductQuestion[]
+  wishlist       Wishlist[]
+  cartItems      CartItem[]
 }
 
 model ProductSpecification {
@@ -186,4 +190,32 @@ model Payment {
   status    PaymentStatus @default(PENDING)
   method    String?
   paidAt    DateTime?
+}
+
+model Wishlist {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+
+  @@unique([userId, productId])
+}
+
+model Cart {
+  id        String     @id @default(uuid())
+  user      User       @relation(fields: [userId], references: [id])
+  userId    String     @unique
+  items     CartItem[]
+}
+
+model CartItem {
+  id        String   @id @default(uuid())
+  cart      Cart     @relation(fields: [cartId], references: [id])
+  cartId    String
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+  quantity  Int
+
+  @@unique([cartId, productId])
 }

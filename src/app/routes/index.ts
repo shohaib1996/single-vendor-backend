@@ -11,6 +11,10 @@ import { PaymentRoutes } from '../modules/payment/payment.routes';
 import { ReviewRoutes } from '../modules/review/review.routes';
 import { ProductQuestionRoutes } from '../modules/productQuestion/productQuestion.routes';
 import { ProductAnswerRoutes } from '../modules/productAnswer/productAnswer.routes';
+import { FilterOptionRoutes } from '../modules/filterOption/filterOption.routes';
+import { ProductSpecificationRoutes } from '../modules/productSpecification/productSpecification.routes';
+import { WishlistRoutes } from '../modules/wishlist/wishlist.routes';
+import { CartRoutes } from '../modules/cart/cart.routes';
 
 const moduleRoutes = [
   {
@@ -48,6 +52,22 @@ const moduleRoutes = [
   {
     path: '/product-answers',
     route: ProductAnswerRoutes,
+  },
+  {
+    path: '/filter-options',
+    route: FilterOptionRoutes,
+  },
+  {
+    path: '/product-specifications',
+    route: ProductSpecificationRoutes,
+  },
+  {
+    path: '/wishlist',
+    route: WishlistRoutes,
+  },
+  {
+    path: '/cart',
+    route: CartRoutes,
   },
 ];
 
