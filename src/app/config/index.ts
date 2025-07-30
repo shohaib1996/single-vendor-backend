@@ -9,4 +9,6 @@ export default {
   JWT_SECRET: process.env.JWT_SECRET,
   STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
   BASE_URL: process.env.BASE_URL,
+  EMAIL_USER: process.env.EMAIL_USER,
+  EMAIL_PASS: process.env.EMAIL_PASS,
 };

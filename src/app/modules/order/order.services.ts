@@ -1,6 +1,8 @@
 import prisma from '../../lib/prisma';
 import { IOrder } from './order.interface';
 import { ApiError } from '../../errors/ApiError';
+import { sendEmail } from '../email/email.utils';
+import { getInvoiceEmailTemplate } from '../email/email.template';
 
 const createOrderIntoDB = async (payload: IOrder) => {
   const { userId, orderItems } = payload;
@@ -85,6 +87,26 @@ const createOrderIntoDB = async (payload: IOrder) => {
 
     return updatedOrder;
   });
+
+  // Fetch the full order details for the email
+  const fullOrderDetails = await prisma.order.findUnique({
+    where: {
+      id: orderData.id,
+    },
+    include: {
+      user: true,
+      orderItems: {
+        include: {
+          product: true,
+        },
+      },
+    },
+  });
+
+  if (fullOrderDetails) {
+    const emailHtml = getInvoiceEmailTemplate(fullOrderDetails, 'Pending');
+    await sendEmail("batikromeye@gmail.com", 'Your Order Confirmation', emailHtml);
+  }
 
   return orderData;
 };

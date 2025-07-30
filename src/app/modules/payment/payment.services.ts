@@ -3,6 +3,9 @@ import Stripe from 'stripe';
 import { PrismaClient, PaymentStatus } from '@prisma/client';
 import config from '../../config';
 
+import { sendEmail } from '../email/email.utils';
+import { getInvoiceEmailTemplate } from '../email/email.template';
+
 const prisma = new PrismaClient();
 
 const stripe = new Stripe(config.STRIPE_SECRET_KEY as string, {
@@ -79,6 +82,25 @@ const updatePaymentStatus = async (
       paidAt: status === PaymentStatus.COMPLETED ? new Date() : undefined,
     },
   });
+
+  if (status === PaymentStatus.COMPLETED) {
+    const order = await prisma.order.findUnique({
+      where: { id: orderId },
+      include: {
+        user: true,
+        orderItems: {
+          include: {
+            product: true,
+          },
+        },
+      },
+    });
+
+    if (order) {
+      const emailHtml = getInvoiceEmailTemplate(order, 'Paid');
+      await sendEmail("batikromeye@gmail.com", 'Payment Successful - Your Invoice', emailHtml);
+    }
+  }
 
   return updatedPayment;
 };
