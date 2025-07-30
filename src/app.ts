@@ -5,6 +5,7 @@ import './app/interfaces';
 import routes from './app/routes';
 import { globalErrorHandler } from './app/middleware/globalErrorHandler';
 import { notFound } from './app/middleware/notFound';
+import { UploaderRoutes } from './app/modules/uploader/uploader.routes';
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.get("/", (req, res) => {
 });
 
 app.use('/api/v1', routes);
+app.use('/api/v1', UploaderRoutes);
 
 app.use(notFound);
 
