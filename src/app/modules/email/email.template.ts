@@ -7,9 +7,9 @@ export const getInvoiceEmailTemplate = (order: any, paymentStatus: string) => {
       <td>${item.quantity}</td>
       <td>${item.price.toFixed(2)}</td>
       <td>${(item.quantity * item.price).toFixed(2)}</td>
-    </tr>`,
+    </tr>`
     )
-    .join('');
+    .join("");
 
   return `
     <!DOCTYPE html>
@@ -83,9 +83,7 @@ export const getInvoiceEmailTemplate = (order: any, paymentStatus: string) => {
           <div class="order-details">
             <h2>Order Details</h2>
             <p><strong>Order ID:</strong> ${order.id}</p>
-            <p><strong>Order Date:</strong> ${new Date(
-              order.createdAt,
-            ).toLocaleDateString()}</p>
+            <p><strong>Order Date:</strong> ${new Date(order.createdAt).toLocaleDateString()}</p>
             <p><strong>Payment Status:</strong> ${paymentStatus}</p>
             <table>
               <thead>

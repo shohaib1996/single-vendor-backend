@@ -1,6 +1,6 @@
-import prisma from '../../lib/prisma';
-import { ICategory } from './category.interface';
-import { ApiError } from '../../errors/ApiError';
+import prisma from "../../lib/prisma";
+import { ICategory } from "./category.interface";
+import { ApiError } from "../../errors/ApiError";
 
 const createCategoryIntoDB = async (payload: ICategory) => {
   const result = await prisma.category.create({
@@ -40,7 +40,7 @@ const updateCategory = async (id: string, payload: Partial<ICategory>) => {
   });
 
   if (!isExist) {
-    throw new ApiError(404, 'Category not found');
+    throw new ApiError(404, "Category not found");
   }
 
   const result = await prisma.category.update({
@@ -60,7 +60,7 @@ const deleteCategory = async (id: string) => {
   });
 
   if (!isExist) {
-    throw new ApiError(404, 'Category not found');
+    throw new ApiError(404, "Category not found");
   }
 
   const result = await prisma.category.delete({

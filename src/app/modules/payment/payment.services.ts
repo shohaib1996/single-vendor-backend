@@ -1,21 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Stripe from 'stripe';
-import { PrismaClient, PaymentStatus } from '@prisma/client';
-import config from '../../config';
+import Stripe from "stripe";
+import { PrismaClient, PaymentStatus } from "@prisma/client";
+import config from "../../config";
 
-import { sendEmail } from '../email/email.utils';
-import { getInvoiceEmailTemplate } from '../email/email.template';
+import { sendEmail } from "../email/email.utils";
+import { getInvoiceEmailTemplate } from "../email/email.template";
 
 const prisma = new PrismaClient();
 
 const stripe = new Stripe(config.STRIPE_SECRET_KEY as string, {
-  apiVersion: '2025-06-30.basil',
+  apiVersion: "2025-06-30.basil",
 });
 
 const createCheckoutSession = async (
   amount: number,
   currency: string,
-  orderId: string,
+  orderId: string
 ): Promise<any> => {
   // Check if Payment already exists
   const existingPayment = await prisma.payment.findUnique({
@@ -29,31 +29,31 @@ const createCheckoutSession = async (
         status: PaymentStatus.PENDING,
       },
     });
-    console.log('✅ Payment record created for orderId:', orderId);
+    console.log("✅ Payment record created for orderId:", orderId);
   } else {
-    console.log('ℹ️ Payment record already exists for orderId:', orderId);
+    console.log("ℹ️ Payment record already exists for orderId:", orderId);
   }
 
   const successUrl = `${config.BASE_URL}/api/v1/payment/success?session_id={CHECKOUT_SESSION_ID}`;
   const cancelUrl = `${config.BASE_URL}/api/v1/payment/cancel?orderId=${orderId}`;
 
-  if (!successUrl.startsWith('http')) {
-    throw new Error('Invalid BASE_URL, must start with http or https');
+  if (!successUrl.startsWith("http")) {
+    throw new Error("Invalid BASE_URL, must start with http or https");
   }
 
   const session = await stripe.checkout.sessions.create({
-    payment_method_types: ['card'],
+    payment_method_types: ["card"],
     line_items: [
       {
         price_data: {
           currency: currency,
-          product_data: { name: 'Order Payment' },
+          product_data: { name: "Order Payment" },
           unit_amount: amount * 100,
         },
         quantity: 1,
       },
     ],
-    mode: 'payment',
+    mode: "payment",
     success_url: successUrl,
     cancel_url: cancelUrl,
     metadata: {
@@ -64,10 +64,7 @@ const createCheckoutSession = async (
   return { url: session.url };
 };
 
-const updatePaymentStatus = async (
-  orderId: string,
-  status: PaymentStatus,
-): Promise<any> => {
+const updatePaymentStatus = async (orderId: string, status: PaymentStatus): Promise<any> => {
   const payment = await prisma.payment.findUnique({ where: { orderId } });
 
   if (!payment) {
@@ -78,7 +75,7 @@ const updatePaymentStatus = async (
     where: { orderId },
     data: {
       status,
-      method: 'stripe',
+      method: "stripe",
       paidAt: status === PaymentStatus.COMPLETED ? new Date() : undefined,
     },
   });
@@ -97,8 +94,8 @@ const updatePaymentStatus = async (
     });
 
     if (order) {
-      const emailHtml = getInvoiceEmailTemplate(order, 'Paid');
-      await sendEmail("batikromeye@gmail.com", 'Payment Successful - Your Invoice', emailHtml);
+      const emailHtml = getInvoiceEmailTemplate(order, "Paid");
+      await sendEmail("batikromeye@gmail.com", "Payment Successful - Your Invoice", emailHtml);
     }
   }
 
@@ -107,15 +104,12 @@ const updatePaymentStatus = async (
 
 const getCheckoutResult = async (sessionId: string) => {
   const sessionPromise = stripe.checkout.sessions.retrieve(sessionId, {
-    expand: ['payment_intent.payment_method'],
+    expand: ["payment_intent.payment_method"],
   });
 
   const lineItemsPromise = stripe.checkout.sessions.listLineItems(sessionId);
 
-  const [session, lineItems] = await Promise.all([
-    sessionPromise,
-    lineItemsPromise,
-  ]);
+  const [session, lineItems] = await Promise.all([sessionPromise, lineItemsPromise]);
 
   return { session, lineItems };
 };

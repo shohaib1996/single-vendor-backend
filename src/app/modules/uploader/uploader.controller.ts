@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
-import catchAsync from '../../utils/catchAsync';
-import { sendImageToCloudinary } from './uploader.utils';
+import { Request, Response } from "express";
+import catchAsync from "../../utils/catchAsync";
+import { sendImageToCloudinary } from "./uploader.utils";
 
 const uploadFiles = catchAsync(async (req: Request, res: Response) => {
   const files = req.files as Express.Multer.File[];
@@ -9,7 +9,7 @@ const uploadFiles = catchAsync(async (req: Request, res: Response) => {
   if (!files || files.length === 0) {
     return res.status(400).json({
       success: false,
-      message: 'No files were uploaded.',
+      message: "No files were uploaded.",
     });
   }
 
@@ -20,7 +20,7 @@ const uploadFiles = catchAsync(async (req: Request, res: Response) => {
 
   res.status(200).json({
     success: true,
-    message: 'Files uploaded successfully',
+    message: "Files uploaded successfully",
     data: imageUrls,
   });
 });

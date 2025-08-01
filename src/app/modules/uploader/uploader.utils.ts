@@ -1,7 +1,7 @@
-import { v2 as cloudinary } from 'cloudinary';
-import * as fs from 'fs';
-import multer from 'multer';
-import config from '../../config';
+import { v2 as cloudinary } from "cloudinary";
+import * as fs from "fs";
+import multer from "multer";
+import config from "../../config";
 
 cloudinary.config({
   cloud_name: config.CLOUDINARY_CLOUD_NAME,
@@ -11,7 +11,7 @@ cloudinary.config({
 
 export const sendImageToCloudinary = (
   imageName: string,
-  path: string,
+  path: string
 ): Promise<Record<string, unknown>> => {
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload(
@@ -29,21 +29,21 @@ export const sendImageToCloudinary = (
           if (err) {
             console.log(err);
           } else {
-            console.log('File is deleted.');
+            console.log("File is deleted.");
           }
         });
-      },
+      }
     );
   });
 };
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, process.cwd() + '/uploads/');
+    cb(null, process.cwd() + "/uploads/");
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + '-' + uniqueSuffix);
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + "-" + uniqueSuffix);
   },
 });
 

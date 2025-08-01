@@ -1,13 +1,10 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 const createProductAnswerZodSchema = z.object({
   body: z.object({
-    answer: z.string()
-      .min(1, { message: 'Answer is required' }),
-    questionId: z.string()
-      .min(1, { message: 'Question ID is required' }),
-    adminId: z.string()
-      .min(1, { message: 'Admin ID is required' }),
+    answer: z.string().min(1, { message: "Answer is required" }),
+    questionId: z.string().min(1, { message: "Question ID is required" }),
+    adminId: z.string().min(1, { message: "Admin ID is required" }),
   }),
 });
 

@@ -1,4 +1,4 @@
-import { PrismaClient, ProductAnswer } from '@prisma/client';
+import { PrismaClient, ProductAnswer } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -19,7 +19,7 @@ const getSingleProductAnswer = async (id: string): Promise<ProductAnswer | null>
 
 const updateProductAnswer = async (
   id: string,
-  payload: Partial<ProductAnswer>,
+  payload: Partial<ProductAnswer>
 ): Promise<ProductAnswer> => {
   const result = await prisma.productAnswer.update({ where: { id }, data: payload });
   return result;

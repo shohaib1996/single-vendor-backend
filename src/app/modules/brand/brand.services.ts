@@ -1,6 +1,6 @@
-import prisma from '../../lib/prisma';
-import { IBrand } from './brand.interface';
-import { ApiError } from '../../errors/ApiError';
+import prisma from "../../lib/prisma";
+import { IBrand } from "./brand.interface";
+import { ApiError } from "../../errors/ApiError";
 
 const createBrandIntoDB = async (payload: IBrand) => {
   const { categoryIds, ...brandData } = payload;
@@ -9,8 +9,8 @@ const createBrandIntoDB = async (payload: IBrand) => {
     data: {
       ...brandData,
       categories: {
-        connect: categoryIds?.map(id => ({ id }))
-      }
+        connect: categoryIds?.map((id) => ({ id })),
+      },
     },
   });
   return result;
@@ -47,7 +47,7 @@ const updateBrand = async (id: string, payload: Partial<IBrand>) => {
   });
 
   if (!isExist) {
-    throw new ApiError(404, 'Brand not found');
+    throw new ApiError(404, "Brand not found");
   }
 
   const result = await prisma.brand.update({
@@ -57,8 +57,8 @@ const updateBrand = async (id: string, payload: Partial<IBrand>) => {
     data: {
       ...brandData,
       categories: {
-        set: categoryIds?.map(id => ({ id }))
-      }
+        set: categoryIds?.map((id) => ({ id })),
+      },
     },
   });
   return result;
@@ -72,7 +72,7 @@ const deleteBrand = async (id: string) => {
   });
 
   if (!isExist) {
-    throw new ApiError(404, 'Brand not found');
+    throw new ApiError(404, "Brand not found");
   }
 
   const result = await prisma.brand.delete({

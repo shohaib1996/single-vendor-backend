@@ -1,35 +1,26 @@
-import express from 'express';
-import { BrandController } from './brand.controller';
-import validateRequest from '../../middleware/validateRequest';
-import { brandValidationSchema } from './brand.validation';
+import express from "express";
+import { BrandController } from "./brand.controller";
+import validateRequest from "../../middleware/validateRequest";
+import { brandValidationSchema } from "./brand.validation";
 
 const router = express.Router();
 
 router.post(
-  '/create-brand',
+  "/create-brand",
   validateRequest(brandValidationSchema.createBrand),
-  BrandController.createBrand,
+  BrandController.createBrand
 );
 
-router.get(
-  '/',
-  BrandController.getAllBrands,
-);
+router.get("/", BrandController.getAllBrands);
 
-router.get(
-  '/:id',
-  BrandController.getSingleBrand,
-);
+router.get("/:id", BrandController.getSingleBrand);
 
 router.patch(
-  '/:id',
+  "/:id",
   validateRequest(brandValidationSchema.updateBrand),
-  BrandController.updateBrand,
+  BrandController.updateBrand
 );
 
-router.delete(
-  '/:id',
-  BrandController.deleteBrand,
-);
+router.delete("/:id", BrandController.deleteBrand);
 
 export const BrandRoutes = router;

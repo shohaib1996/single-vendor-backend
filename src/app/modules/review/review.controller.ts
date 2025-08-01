@@ -1,13 +1,13 @@
-import { Request, Response } from 'express';
-import { ReviewServices } from './review.services';
-import catchAsync from '../../utils/catchAsync';
+import { Request, Response } from "express";
+import { ReviewServices } from "./review.services";
+import catchAsync from "../../utils/catchAsync";
 
 const createReview = catchAsync(async (req: Request, res: Response) => {
   const result = await ReviewServices.createReview(req.body);
 
   res.status(200).json({
     success: true,
-    message: 'Review created successfully',
+    message: "Review created successfully",
     data: result,
   });
 });
@@ -17,7 +17,7 @@ const getAllReviews = catchAsync(async (req: Request, res: Response) => {
 
   res.status(200).json({
     success: true,
-    message: 'Reviews retrieved successfully',
+    message: "Reviews retrieved successfully",
     data: result,
   });
 });
@@ -28,7 +28,7 @@ const getSingleReview = catchAsync(async (req: Request, res: Response) => {
 
   res.status(200).json({
     success: true,
-    message: 'Review retrieved successfully',
+    message: "Review retrieved successfully",
     data: result,
   });
 });
@@ -39,7 +39,7 @@ const updateReview = catchAsync(async (req: Request, res: Response) => {
 
   res.status(200).json({
     success: true,
-    message: 'Review updated successfully',
+    message: "Review updated successfully",
     data: result,
   });
 });
@@ -50,7 +50,7 @@ const deleteReview = catchAsync(async (req: Request, res: Response) => {
 
   res.status(200).json({
     success: true,
-    message: 'Review deleted successfully',
+    message: "Review deleted successfully",
     data: result,
   });
 });

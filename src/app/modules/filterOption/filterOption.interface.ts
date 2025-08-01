@@ -1,4 +1,4 @@
-import { FilterOption, FilterType } from '@prisma/client';
+import { FilterOption, FilterType } from "@prisma/client";
 
 export type IFilterOption = FilterOption;
 

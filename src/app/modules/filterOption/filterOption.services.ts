@@ -1,9 +1,7 @@
-import { IFilterOption, IFilterOptionCreatePayload } from './filterOption.interface';
-import prisma from '../../lib/prisma';
+import { IFilterOption, IFilterOptionCreatePayload } from "./filterOption.interface";
+import prisma from "../../lib/prisma";
 
-const createFilterOption = async (
-  payload: IFilterOptionCreatePayload,
-): Promise<IFilterOption> => {
+const createFilterOption = async (payload: IFilterOptionCreatePayload): Promise<IFilterOption> => {
   return await prisma.filterOption.create({ data: payload });
 };
 
@@ -17,7 +15,7 @@ const getFilterOption = async (id: string): Promise<IFilterOption | null> => {
 
 const updateFilterOption = async (
   id: string,
-  payload: Partial<IFilterOptionCreatePayload>,
+  payload: Partial<IFilterOptionCreatePayload>
 ): Promise<IFilterOption> => {
   return await prisma.filterOption.update({ where: { id }, data: payload });
 };

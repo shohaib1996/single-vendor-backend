@@ -1,5 +1,5 @@
-import { ErrorRequestHandler } from 'express';
-import { ApiError } from '../errors/ApiError';
+import { ErrorRequestHandler } from "express";
+import { ApiError } from "../errors/ApiError";
 
 export const globalErrorHandler: ErrorRequestHandler = (err, req, res) => {
   if (err instanceof ApiError) {
@@ -12,7 +12,7 @@ export const globalErrorHandler: ErrorRequestHandler = (err, req, res) => {
 
   res.status(500).json({
     success: false,
-    message: 'Internal server error',
+    message: "Internal server error",
     error: err?.message || err,
   });
 };

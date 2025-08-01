@@ -1,9 +1,10 @@
-import prisma from '../../lib/prisma';
-import { IProductSpecification, IProductSpecificationCreatePayload } from './productSpecification.interface';
+import prisma from "../../lib/prisma";
+import {
+  IProductSpecification,
+  IProductSpecificationCreatePayload,
+} from "./productSpecification.interface";
 
-const createProductSpecification = async (
-  payload: IProductSpecificationCreatePayload,
-) => {
+const createProductSpecification = async (payload: IProductSpecificationCreatePayload) => {
   return await prisma.productSpecification.createMany({ data: payload });
 };
 
@@ -17,7 +18,7 @@ const getProductSpecification = async (id: string): Promise<IProductSpecificatio
 
 const updateProductSpecification = async (
   id: string,
-  payload: Partial<IProductSpecificationCreatePayload>,
+  payload: Partial<IProductSpecificationCreatePayload>
 ): Promise<IProductSpecification> => {
   return await prisma.productSpecification.update({ where: { id }, data: payload });
 };

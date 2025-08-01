@@ -1,6 +1,6 @@
-import prisma from '../../lib/prisma';
-import { IProduct, IProductQuery } from './product.interface';
-import { ApiError } from '../../errors/ApiError';
+import prisma from "../../lib/prisma";
+import { IProduct, IProductQuery } from "./product.interface";
+import { ApiError } from "../../errors/ApiError";
 
 const createProductIntoDB = async (payload: IProduct) => {
   const result = await prisma.product.create({
@@ -50,11 +50,11 @@ const getAllProducts = async (query: IProductQuery) => {
       some: {
         key: {
           equals: key,
-          mode: 'insensitive',
+          mode: "insensitive",
         },
         value: {
           contains: value as string,
-          mode: 'insensitive',
+          mode: "insensitive",
         },
       },
     },
@@ -110,7 +110,7 @@ const updateProduct = async (id: string, payload: Partial<IProduct>) => {
   });
 
   if (!isExist) {
-    throw new ApiError(404, 'Product not found');
+    throw new ApiError(404, "Product not found");
   }
 
   const result = await prisma.product.update({
@@ -130,7 +130,7 @@ const deleteProduct = async (id: string) => {
   });
 
   if (!isExist) {
-    throw new ApiError(404, 'Product not found');
+    throw new ApiError(404, "Product not found");
   }
 
   const result = await prisma.product.delete({

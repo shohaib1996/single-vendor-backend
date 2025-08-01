@@ -1,5 +1,5 @@
-import { z } from 'zod';
-import { FilterType } from '@prisma/client';
+import { z } from "zod";
+import { FilterType } from "@prisma/client";
 
 const create = z.object({
   body: z.object({

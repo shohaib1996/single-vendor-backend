@@ -1,13 +1,13 @@
-import { Request, Response } from 'express';
-import catchAsync from '../../utils/catchAsync';
-import { ProductServices } from './product.services';
+import { Request, Response } from "express";
+import catchAsync from "../../utils/catchAsync";
+import { ProductServices } from "./product.services";
 
 const createProduct = catchAsync(async (req: Request, res: Response) => {
   const result = await ProductServices.createProductIntoDB(req.body);
 
   res.status(201).json({
     success: true,
-    message: 'Product created successfully',
+    message: "Product created successfully",
     data: result,
   });
 });
@@ -17,7 +17,7 @@ const getAllProducts = catchAsync(async (req: Request, res: Response) => {
 
   res.status(200).json({
     success: true,
-    message: 'Products retrieved successfully',
+    message: "Products retrieved successfully",
     meta: result.meta,
     data: result.data,
   });
@@ -29,7 +29,7 @@ const getSingleProduct = catchAsync(async (req: Request, res: Response) => {
 
   res.status(200).json({
     success: true,
-    message: 'Product retrieved successfully',
+    message: "Product retrieved successfully",
     data: result,
   });
 });
@@ -40,7 +40,7 @@ const updateProduct = catchAsync(async (req: Request, res: Response) => {
 
   res.status(200).json({
     success: true,
-    message: 'Product updated successfully',
+    message: "Product updated successfully",
     data: result,
   });
 });
@@ -51,7 +51,7 @@ const deleteProduct = catchAsync(async (req: Request, res: Response) => {
 
   res.status(200).json({
     success: true,
-    message: 'Product deleted successfully',
+    message: "Product deleted successfully",
     data: result,
   });
 });

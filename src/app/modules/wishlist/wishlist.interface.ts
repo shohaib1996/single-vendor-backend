@@ -1,4 +1,4 @@
-import { Wishlist } from '@prisma/client';
+import { Wishlist } from "@prisma/client";
 
 export type IWishlist = Wishlist;
 

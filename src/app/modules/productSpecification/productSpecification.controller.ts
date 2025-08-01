@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
-import catchAsync from '../../utils/catchAsync';
-import { ProductSpecificationService } from './productSpecification.services';
+import { Request, Response } from "express";
+import catchAsync from "../../utils/catchAsync";
+import { ProductSpecificationService } from "./productSpecification.services";
 
 const createProductSpecification = catchAsync(async (req: Request, res: Response) => {
   const result = await ProductSpecificationService.createProductSpecification(req.body);
@@ -20,14 +20,14 @@ const getProductSpecification = catchAsync(async (req: Request, res: Response) =
 const updateProductSpecification = catchAsync(async (req: Request, res: Response) => {
   const result = await ProductSpecificationService.updateProductSpecification(
     req.params.id,
-    req.body,
+    req.body
   );
   res.status(200).json({ success: true, data: result });
 });
 
 const deleteProductSpecification = catchAsync(async (req: Request, res: Response) => {
   await ProductSpecificationService.deleteProductSpecification(req.params.id);
-  res.status(200).json({ success: true, message: 'Product specification deleted' });
+  res.status(200).json({ success: true, message: "Product specification deleted" });
 });
 
 export const ProductSpecificationController = {

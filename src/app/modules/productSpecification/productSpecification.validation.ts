@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 const create = z.object({
   body: z.array(
@@ -6,7 +6,7 @@ const create = z.object({
       key: z.string(),
       value: z.string(),
       productId: z.string(),
-    }),
+    })
   ),
 });
 

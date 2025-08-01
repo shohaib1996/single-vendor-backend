@@ -1,4 +1,4 @@
-import { PrismaClient, Review } from '@prisma/client';
+import { PrismaClient, Review } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -17,10 +17,7 @@ const getSingleReview = async (id: string): Promise<Review | null> => {
   return result;
 };
 
-const updateReview = async (
-  id: string,
-  payload: Partial<Review>,
-): Promise<Review> => {
+const updateReview = async (id: string, payload: Partial<Review>): Promise<Review> => {
   const result = await prisma.review.update({ where: { id }, data: payload });
   return result;
 };

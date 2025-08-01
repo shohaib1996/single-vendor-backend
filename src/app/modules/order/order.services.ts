@@ -1,8 +1,8 @@
-import prisma from '../../lib/prisma';
-import { IOrder } from './order.interface';
-import { ApiError } from '../../errors/ApiError';
-import { sendEmail } from '../email/email.utils';
-import { getInvoiceEmailTemplate } from '../email/email.template';
+import prisma from "../../lib/prisma";
+import { IOrder } from "./order.interface";
+import { ApiError } from "../../errors/ApiError";
+import { sendEmail } from "../email/email.utils";
+import { getInvoiceEmailTemplate } from "../email/email.template";
 
 const createOrderIntoDB = async (payload: IOrder) => {
   const { userId, orderItems } = payload;
@@ -14,7 +14,7 @@ const createOrderIntoDB = async (payload: IOrder) => {
   });
 
   if (!user) {
-    throw new ApiError(404, 'User not found');
+    throw new ApiError(404, "User not found");
   }
 
   let total = 0;
@@ -81,7 +81,7 @@ const createOrderIntoDB = async (payload: IOrder) => {
     await transaction.payment.create({
       data: {
         orderId: createdOrder.id,
-        status: 'PENDING',
+        status: "PENDING",
       },
     });
 
@@ -104,13 +104,12 @@ const createOrderIntoDB = async (payload: IOrder) => {
   });
 
   if (fullOrderDetails) {
-    const emailHtml = getInvoiceEmailTemplate(fullOrderDetails, 'Pending');
-    await sendEmail("batikromeye@gmail.com", 'Your Order Confirmation', emailHtml);
+    const emailHtml = getInvoiceEmailTemplate(fullOrderDetails, "Pending");
+    await sendEmail("batikromeye@gmail.com", "Your Order Confirmation", emailHtml);
   }
 
   return orderData;
 };
-
 
 const getAllOrders = async () => {
   const result = await prisma.order.findMany({
@@ -151,7 +150,7 @@ const updateOrder = async (id: string, payload: Partial<IOrder>) => {
   });
 
   if (!isExist) {
-    throw new ApiError(404, 'Order not found');
+    throw new ApiError(404, "Order not found");
   }
 
   // Exclude userId and orderItems from payload to avoid type conflict
@@ -174,7 +173,7 @@ const deleteOrder = async (id: string) => {
   });
 
   if (!isExist) {
-    throw new ApiError(404, 'Order not found');
+    throw new ApiError(404, "Order not found");
   }
 
   const result = await prisma.order.delete({

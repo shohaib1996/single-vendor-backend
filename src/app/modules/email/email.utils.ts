@@ -1,8 +1,8 @@
-import nodemailer from 'nodemailer';
-import config from '../../config';
+import nodemailer from "nodemailer";
+import config from "../../config";
 
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
+  host: "smtp.gmail.com",
   port: 587,
   secure: false, // true for 465, false for other ports
   auth: {
@@ -11,11 +11,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendEmail = async (
-  to: string,
-  subject: string,
-  html: string,
-) => {
+export const sendEmail = async (to: string, subject: string, html: string) => {
   try {
     await transporter.sendMail({
       from: `"Nice Company" <${config.EMAIL_USER}>`, // sender address
@@ -24,7 +20,7 @@ export const sendEmail = async (
       html,
     });
   } catch (error) {
-    console.error('Error sending email:', error);
-    throw new Error('Error sending email');
+    console.error("Error sending email:", error);
+    throw new Error("Error sending email");
   }
 };

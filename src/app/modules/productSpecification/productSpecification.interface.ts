@@ -1,4 +1,4 @@
-import { ProductSpecification } from '@prisma/client';
+import { ProductSpecification } from "@prisma/client";
 
 export type IProductSpecification = ProductSpecification;
 

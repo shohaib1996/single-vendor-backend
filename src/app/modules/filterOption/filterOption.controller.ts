@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
-import catchAsync from '../../utils/catchAsync';
-import { FilterOptionService } from './filterOption.services';
+import { Request, Response } from "express";
+import catchAsync from "../../utils/catchAsync";
+import { FilterOptionService } from "./filterOption.services";
 
 const createFilterOption = catchAsync(async (req: Request, res: Response) => {
   const result = await FilterOptionService.createFilterOption(req.body);
@@ -18,16 +18,13 @@ const getFilterOption = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateFilterOption = catchAsync(async (req: Request, res: Response) => {
-  const result = await FilterOptionService.updateFilterOption(
-    req.params.id,
-    req.body,
-  );
+  const result = await FilterOptionService.updateFilterOption(req.params.id, req.body);
   res.status(200).json({ success: true, data: result });
 });
 
 const deleteFilterOption = catchAsync(async (req: Request, res: Response) => {
   await FilterOptionService.deleteFilterOption(req.params.id);
-  res.status(200).json({ success: true, message: 'Filter option deleted' });
+  res.status(200).json({ success: true, message: "Filter option deleted" });
 });
 
 export const FilterOptionController = {

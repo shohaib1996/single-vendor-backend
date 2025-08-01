@@ -1,13 +1,13 @@
-import { Request, Response } from 'express';
-import catchAsync from '../../utils/catchAsync';
-import { OrderServices } from './order.services';
+import { Request, Response } from "express";
+import catchAsync from "../../utils/catchAsync";
+import { OrderServices } from "./order.services";
 
 const createOrder = catchAsync(async (req: Request, res: Response) => {
   const result = await OrderServices.createOrderIntoDB(req.body);
 
   res.status(201).json({
     success: true,
-    message: 'Order created successfully',
+    message: "Order created successfully",
     data: result,
   });
 });
@@ -17,7 +17,7 @@ const getAllOrders = catchAsync(async (req: Request, res: Response) => {
 
   res.status(200).json({
     success: true,
-    message: 'Orders retrieved successfully',
+    message: "Orders retrieved successfully",
     data: result,
   });
 });
@@ -28,7 +28,7 @@ const getSingleOrder = catchAsync(async (req: Request, res: Response) => {
 
   res.status(200).json({
     success: true,
-    message: 'Order retrieved successfully',
+    message: "Order retrieved successfully",
     data: result,
   });
 });
@@ -39,7 +39,7 @@ const updateOrder = catchAsync(async (req: Request, res: Response) => {
 
   res.status(200).json({
     success: true,
-    message: 'Order updated successfully',
+    message: "Order updated successfully",
     data: result,
   });
 });
@@ -50,7 +50,7 @@ const deleteOrder = catchAsync(async (req: Request, res: Response) => {
 
   res.status(200).json({
     success: true,
-    message: 'Order deleted successfully',
+    message: "Order deleted successfully",
     data: result,
   });
 });

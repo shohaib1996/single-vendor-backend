@@ -1,14 +1,14 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-import { ProductQuestionServices } from './productQuestion.services';
-import catchAsync from '../../utils/catchAsync';
+import { ProductQuestionServices } from "./productQuestion.services";
+import catchAsync from "../../utils/catchAsync";
 
 const createProductQuestion = catchAsync(async (req: Request, res: Response) => {
   const result = await ProductQuestionServices.createProductQuestion(req.body);
 
   res.status(200).json({
     success: true,
-    message: 'Product question created successfully',
+    message: "Product question created successfully",
     data: result,
   });
 });
@@ -18,7 +18,7 @@ const getAllProductQuestions = catchAsync(async (req: Request, res: Response) =>
 
   res.status(200).json({
     success: true,
-    message: 'Product questions retrieved successfully',
+    message: "Product questions retrieved successfully",
     data: result,
   });
 });
@@ -29,7 +29,7 @@ const getSingleProductQuestion = catchAsync(async (req: Request, res: Response) 
 
   res.status(200).json({
     success: true,
-    message: 'Product question retrieved successfully',
+    message: "Product question retrieved successfully",
     data: result,
   });
 });
@@ -40,7 +40,7 @@ const updateProductQuestion = catchAsync(async (req: Request, res: Response) => 
 
   res.status(200).json({
     success: true,
-    message: 'Product question updated successfully',
+    message: "Product question updated successfully",
     data: result,
   });
 });
@@ -51,7 +51,7 @@ const deleteProductQuestion = catchAsync(async (req: Request, res: Response) => 
 
   res.status(200).json({
     success: true,
-    message: 'Product question deleted successfully',
+    message: "Product question deleted successfully",
     data: result,
   });
 });

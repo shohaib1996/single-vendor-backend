@@ -1,35 +1,26 @@
-import express from 'express';
-import { ProductAnswerController } from './productAnswer.controller';
-import validateRequest from '../../../app/middleware/validateRequest';
-import { ProductAnswerValidation } from './productAnswer.validation';
+import express from "express";
+import { ProductAnswerController } from "./productAnswer.controller";
+import validateRequest from "../../../app/middleware/validateRequest";
+import { ProductAnswerValidation } from "./productAnswer.validation";
 
 const router = express.Router();
 
 router.post(
-  '/',
+  "/",
   validateRequest(ProductAnswerValidation.createProductAnswerZodSchema),
-  ProductAnswerController.createProductAnswer,
+  ProductAnswerController.createProductAnswer
 );
 
-router.get(
-  '/',
-  ProductAnswerController.getAllProductAnswers,
-);
+router.get("/", ProductAnswerController.getAllProductAnswers);
 
-router.get(
-  '/:id',
-  ProductAnswerController.getSingleProductAnswer,
-);
+router.get("/:id", ProductAnswerController.getSingleProductAnswer);
 
 router.patch(
-  '/:id',
+  "/:id",
   validateRequest(ProductAnswerValidation.updateProductAnswerZodSchema),
-  ProductAnswerController.updateProductAnswer,
+  ProductAnswerController.updateProductAnswer
 );
 
-router.delete(
-  '/:id',
-  ProductAnswerController.deleteProductAnswer,
-);
+router.delete("/:id", ProductAnswerController.deleteProductAnswer);
 
 export const ProductAnswerRoutes = router;

@@ -1,10 +1,7 @@
-import prisma from '../../lib/prisma';
-import { ICart, ICartItem, ICartItemCreatePayload } from './cart.interface';
+import prisma from "../../lib/prisma";
+import { ICart, ICartItem, ICartItemCreatePayload } from "./cart.interface";
 
-
-const createCart = async (
-  payload: ICartItemCreatePayload,
-): Promise<ICart> => {
+const createCart = async (payload: ICartItemCreatePayload): Promise<ICart> => {
   const { userId, productId, quantity } = payload;
 
   let cart = await prisma.cart.findUnique({ where: { userId } });
@@ -36,10 +33,7 @@ const getCart = async (userId: string): Promise<ICart | null> => {
   return await prisma.cart.findUnique({ where: { userId }, include: { items: true } });
 };
 
-const updateCartItem = async (
-  cartItemId: string,
-  quantity: number,
-): Promise<ICartItem> => {
+const updateCartItem = async (cartItemId: string, quantity: number): Promise<ICartItem> => {
   return await prisma.cartItem.update({
     where: { id: cartItemId },
     data: { quantity },

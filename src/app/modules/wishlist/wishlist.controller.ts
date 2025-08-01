@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
-import catchAsync from '../../utils/catchAsync';
-import { WishlistService } from './wishlist.services';
+import { Request, Response } from "express";
+import catchAsync from "../../utils/catchAsync";
+import { WishlistService } from "./wishlist.services";
 
 const createWishlist = catchAsync(async (req: Request, res: Response) => {
   const result = await WishlistService.createWishlist({
@@ -17,7 +17,7 @@ const getWishlist = catchAsync(async (req: Request, res: Response) => {
 
 const deleteWishlist = catchAsync(async (req: Request, res: Response) => {
   await WishlistService.deleteWishlist(req.params.id);
-  res.status(200).json({ success: true, message: 'Wishlist item deleted' });
+  res.status(200).json({ success: true, message: "Wishlist item deleted" });
 });
 
 export const WishlistController = {

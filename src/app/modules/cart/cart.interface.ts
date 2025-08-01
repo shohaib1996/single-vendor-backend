@@ -1,4 +1,4 @@
-import { Cart, CartItem } from '@prisma/client';
+import { Cart, CartItem } from "@prisma/client";
 
 export type ICart = Cart & { items: CartItem[] };
 export type ICartItem = CartItem;

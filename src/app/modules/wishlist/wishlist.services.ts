@@ -1,10 +1,7 @@
-import prisma from '../../lib/prisma';
-import { IWishlist, IWishlistCreatePayload } from './wishlist.interface';
+import prisma from "../../lib/prisma";
+import { IWishlist, IWishlistCreatePayload } from "./wishlist.interface";
 
-
-const createWishlist = async (
-  payload: IWishlistCreatePayload,
-): Promise<IWishlist> => {
+const createWishlist = async (payload: IWishlistCreatePayload): Promise<IWishlist> => {
   return await prisma.wishlist.create({ data: payload });
 };
 

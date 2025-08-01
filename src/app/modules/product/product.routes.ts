@@ -1,35 +1,26 @@
-import express from 'express';
-import { ProductController } from './product.controller';
-import validateRequest from '../../middleware/validateRequest';
-import { productValidationSchema } from './product.validation';
+import express from "express";
+import { ProductController } from "./product.controller";
+import validateRequest from "../../middleware/validateRequest";
+import { productValidationSchema } from "./product.validation";
 
 const router = express.Router();
 
 router.post(
-  '/create-product',
+  "/create-product",
   validateRequest(productValidationSchema.createProduct),
-  ProductController.createProduct,
+  ProductController.createProduct
 );
 
-router.get(
-  '/',
-  ProductController.getAllProducts,
-);
+router.get("/", ProductController.getAllProducts);
 
-router.get(
-  '/:id',
-  ProductController.getSingleProduct,
-);
+router.get("/:id", ProductController.getSingleProduct);
 
 router.patch(
-  '/:id',
+  "/:id",
   validateRequest(productValidationSchema.updateProduct),
-  ProductController.updateProduct,
+  ProductController.updateProduct
 );
 
-router.delete(
-  '/:id',
-  ProductController.deleteProduct,
-);
+router.delete("/:id", ProductController.deleteProduct);
 
 export const ProductRoutes = router;
