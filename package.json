@@ -7,7 +7,8 @@
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write .",
-    "build": "tsc"
+    "build": "tsc",
+    "postinstall": "prisma migrate deploy"
   },
   "keywords": [],
   "author": "",
