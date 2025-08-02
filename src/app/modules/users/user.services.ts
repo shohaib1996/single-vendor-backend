@@ -6,7 +6,7 @@ import { ApiError } from "../../errors/ApiError";
 import { generateToken } from "../../utils/generateToken";
 
 const createUserIntoDB = async (payload: IUser) => {
-  const { name, email, password } = payload;
+  const { name, email, password, address, phone, avatarUrl } = payload;
 
   const isUserExist = await prisma.user.findUnique({
     where: {
@@ -25,6 +25,9 @@ const createUserIntoDB = async (payload: IUser) => {
       name,
       email,
       password: hashedPassword,
+      address,
+      phone,
+      avatarUrl,
     },
   });
 
@@ -62,7 +65,19 @@ const loginUser = async (payload: IUser) => {
   };
 };
 
+const updateUserIntoDB = async (id: string, payload: Partial<IUser>) => {
+  const result = await prisma.user.update({
+    where: {
+      id,
+    },
+    data: payload,
+  });
+
+  return result;
+};
+
 export const UserServices = {
   createUserIntoDB,
   loginUser,
+  updateUserIntoDB,
 };

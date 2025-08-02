@@ -1,4 +1,4 @@
-import { Role } from "@prisma/client";
+import { Role } from '@prisma/client';
 
 export type IUser = {
   id: string;
@@ -6,5 +6,8 @@ export type IUser = {
   email: string;
   password?: string;
   role: Role;
+  address?: string;
+  phone?: string;
+  avatarUrl?: string;
   createdAt: Date;
 };
