@@ -6,4 +6,4 @@ export type IProductSpecificationCreatePayload = {
   key: string;
   value: string;
   productId: string;
-}[];
+};

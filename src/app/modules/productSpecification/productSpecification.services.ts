@@ -5,7 +5,7 @@ import {
 } from "./productSpecification.interface";
 
 const createProductSpecification = async (payload: IProductSpecificationCreatePayload) => {
-  return await prisma.productSpecification.createMany({ data: payload });
+  return await prisma.productSpecification.create({ data: payload });
 };
 
 const getProductSpecifications = async (): Promise<IProductSpecification[]> => {
