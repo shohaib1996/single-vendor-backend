@@ -5,6 +5,8 @@ export const categoryValidationSchema = {
     body: z.object({
       name: z.string(),
       slug: z.string(),
+      icon: z.string().optional(),
+      description: z.string().optional(),
       parentId: z.string().optional(),
     }),
   }),
@@ -12,6 +14,8 @@ export const categoryValidationSchema = {
     body: z.object({
       name: z.string().optional(),
       slug: z.string().optional(),
+      icon: z.string().optional(),
+      description: z.string().optional(),
       parentId: z.string().optional(),
     }),
   }),
