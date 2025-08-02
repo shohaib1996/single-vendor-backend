@@ -1,4 +1,9 @@
-import { Role } from '@prisma/client';
+// Define Role enum locally if not available from @prisma/client
+export enum Role {
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+  // Add other roles as needed
+}
 
 export type IUser = {
   id: string;
