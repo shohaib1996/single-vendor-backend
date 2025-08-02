@@ -10,13 +10,17 @@ const createProductIntoDB = async (payload: IProduct) => {
 };
 
 const getAllProducts = async (query: IProductQuery) => {
-  const { page, limit, categoryId, ...filters } = query;
+  const { page, limit, categoryId, featured, ...filters } = query;
 
   const pageNumber = parseInt(page as string) || 1;
-  const limitNumber = parseInt(limit as string) || 10;
+  const limitNumber = parseInt(limit as string) || 12;
   const skip = (pageNumber - 1) * limitNumber;
 
   const where: any = {};
+
+  if (featured) {
+    where.featured = featured === "true";
+  }
 
   if (categoryId) {
     // a recursive function to get all sub category ids
