@@ -2,6 +2,7 @@ import prisma from "../../lib/prisma";
 import {
   IProductSpecification,
   IProductSpecificationCreatePayload,
+  IProductSpecificationUpdatePayload,
 } from "./productSpecification.interface";
 
 const createProductSpecification = async (payload: IProductSpecificationCreatePayload) => {
