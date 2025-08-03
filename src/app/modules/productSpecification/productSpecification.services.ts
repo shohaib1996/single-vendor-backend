@@ -18,7 +18,7 @@ const getProductSpecification = async (id: string): Promise<IProductSpecificatio
 
 const updateProductSpecification = async (
   id: string,
-  payload: Partial<IProductSpecificationCreatePayload>
+  payload: IProductSpecificationUpdatePayload
 ): Promise<IProductSpecification> => {
   return await prisma.productSpecification.update({ where: { id }, data: payload });
 };

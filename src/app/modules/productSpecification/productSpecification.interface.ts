@@ -7,3 +7,9 @@ export type IProductSpecificationCreatePayload = {
   value: string;
   productId: string;
 }[];
+
+export type IProductSpecificationUpdatePayload = Partial<{
+  key: string;
+  value: string;
+  productId: string;
+}>;
