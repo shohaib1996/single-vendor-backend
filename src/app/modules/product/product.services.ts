@@ -101,6 +101,13 @@ const getSingleProduct = async (id: string) => {
     include: {
       category: true,
       brand: true,
+      specifications: true,
+      reviews: true,
+      questions: {
+        include: {
+          answer: true,
+        },
+      },
     },
   });
   return result;
