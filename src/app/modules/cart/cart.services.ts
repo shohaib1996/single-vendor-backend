@@ -11,7 +11,7 @@ const createCart = async (payload: ICartItemCreatePayload): Promise<ICart> => {
   }
 
   const cartItem = await prisma.cartItem.findFirst({
-    where: { cartId: cart.id, productId },
+    where: { cartId: cart.id, productId},
   });
 
   if (cartItem) {
@@ -30,7 +30,24 @@ const createCart = async (payload: ICartItemCreatePayload): Promise<ICart> => {
 };
 
 const getCart = async (userId: string): Promise<ICart | null> => {
-  return await prisma.cart.findUnique({ where: { userId }, include: { items: true } });
+  return await prisma.cart.findUnique({
+    where: { userId },
+    include: {
+      items: {
+        include: {
+          product: {
+            select: {
+              id: true,
+              name: true,
+              price: true,
+              brand: true,
+              images: true,
+            },
+          },
+        },
+      },
+    },
+  });
 };
 
 const updateCartItem = async (cartItemId: string, quantity: number): Promise<ICartItem> => {
