@@ -6,7 +6,19 @@ const createWishlist = async (payload: IWishlistCreatePayload): Promise<IWishlis
 };
 
 const getWishlist = async (userId: string): Promise<IWishlist[]> => {
-  return await prisma.wishlist.findMany({ where: { userId } });
+  return await prisma.wishlist.findMany({
+    where: { userId },
+    include: {
+      product: {
+        select: {
+          id: true,
+          name: true,
+          price: true,
+          images: true,
+        },
+      },
+    },
+  });
 };
 
 const deleteWishlist = async (id: string): Promise<IWishlist> => {
