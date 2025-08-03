@@ -8,7 +8,8 @@ const createFilterOption = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getFilterOptions = catchAsync(async (req: Request, res: Response) => {
-  const result = await FilterOptionService.getFilterOptions();
+  const { categoryId } = req.query;
+  const result = await FilterOptionService.getFilterOptions(categoryId as string);
   res.status(200).json({ success: true, data: result });
 });
 

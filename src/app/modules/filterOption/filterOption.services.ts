@@ -5,8 +5,12 @@ const createFilterOption = async (payload: IFilterOptionCreatePayload): Promise<
   return await prisma.filterOption.create({ data: payload });
 };
 
-const getFilterOptions = async (): Promise<IFilterOption[]> => {
-  return await prisma.filterOption.findMany();
+const getFilterOptions = async (categoryId?: string): Promise<IFilterOption[]> => {
+  const where: any = {};
+  if (categoryId) {
+    where.categoryId = categoryId;
+  }
+  return await prisma.filterOption.findMany({ where });
 };
 
 const getFilterOption = async (id: string): Promise<IFilterOption | null> => {
