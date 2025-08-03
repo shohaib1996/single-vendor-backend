@@ -34,8 +34,8 @@ const createCheckoutSession = async (
     console.log("ℹ️ Payment record already exists for orderId:", orderId);
   }
 
-  const successUrl = `${config.BASE_URL}/api/v1/payment/success?session_id={CHECKOUT_SESSION_ID}`;
-  const cancelUrl = `${config.BASE_URL}/api/v1/payment/cancel?orderId=${orderId}`;
+  const successUrl = `${config.BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}`;
+  const cancelUrl = `${config.BASE_URL}/cancel?orderId=${orderId}`;
 
   if (!successUrl.startsWith("http")) {
     throw new Error("Invalid BASE_URL, must start with http or https");
