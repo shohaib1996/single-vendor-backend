@@ -2,6 +2,8 @@ import express from "express";
 import { OrderController } from "./order.controller";
 import validateRequest from "../../middleware/validateRequest";
 import { orderValidationSchema } from "./order.validation";
+import { Role } from "@prisma/client";
+import auth from "../../middleware/auth";
 
 const router = express.Router();
 
@@ -11,7 +13,7 @@ router.post(
   OrderController.createOrder
 );
 
-router.get("/", OrderController.getAllOrders);
+router.get("/", auth([Role.ADMIN, Role.USER]), OrderController.getAllOrders);
 
 router.get("/:id", OrderController.getSingleOrder);
 

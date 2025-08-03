@@ -76,8 +76,19 @@ const updateUserIntoDB = async (id: string, payload: Partial<IUser>) => {
   return result;
 };
 
+const getProfile = async (id: string) => {
+  const result = await prisma.user.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  return result;
+};
+
 export const UserServices = {
   createUserIntoDB,
   loginUser,
   updateUserIntoDB,
+  getProfile
 };

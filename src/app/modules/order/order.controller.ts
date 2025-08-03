@@ -13,7 +13,14 @@ const createOrder = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllOrders = catchAsync(async (req: Request, res: Response) => {
-  const result = await OrderServices.getAllOrders();
+  const user = (req as any).user; // Assuming req.user is populated by auth middleware
+  let userId: string | undefined;
+
+  if (user && user.role !== 'ADMIN') {
+    userId = user.id;
+  }
+
+  const result = await OrderServices.getAllOrders(userId);
 
   res.status(200).json({
     success: true,

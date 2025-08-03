@@ -113,6 +113,7 @@ const createOrderIntoDB = async (payload: IOrder) => {
           product: true,
         },
       },
+      payment: true,
     },
   });
 
@@ -124,8 +125,13 @@ const createOrderIntoDB = async (payload: IOrder) => {
   return orderData;
 };
 
-const getAllOrders = async () => {
+const getAllOrders = async (userId?: string) => {
+  const where: any = {};
+  if (userId) {
+    where.userId = userId;
+  }
   const result = await prisma.order.findMany({
+    where,
     include: {
       user: true,
       orderItems: {
@@ -133,6 +139,7 @@ const getAllOrders = async () => {
           product: true,
         },
       },
+      payment: true,
     },
   });
   return result;
@@ -150,6 +157,7 @@ const getSingleOrder = async (id: string) => {
           product: true,
         },
       },
+      payment: true,
     },
   });
   return result;

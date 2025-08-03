@@ -16,7 +16,7 @@ const getAllProducts = async (query: IProductQuery) => {
   const limitNumber = parseInt(limit as string) || 12;
   const skip = (pageNumber - 1) * limitNumber;
 
-  const where: any = {};
+  const where: any = { AND: [] };
 
   if (featured) {
     where.featured = featured === "true";
@@ -48,6 +48,37 @@ const getAllProducts = async (query: IProductQuery) => {
     where.categoryId = { in: categoryIds };
   }
 
+  // Handle brand filter
+  if (filters.brand) {
+    const brands = (filters.brand as string).split(',').map(b => b.trim());
+    where.AND.push({
+      brand: {
+        name: {
+          in: brands,
+          mode: "insensitive",
+        },
+      },
+    });
+    delete filters.brand;
+  }
+
+  // Handle price range filter
+  const priceRangeMin = parseFloat(filters.priceRangeMin as string);
+  const priceRangeMax = parseFloat(filters.priceRangeMax as string);
+
+  if (!isNaN(priceRangeMin) || !isNaN(priceRangeMax)) {
+    const priceFilter: any = {};
+    if (!isNaN(priceRangeMin)) {
+      priceFilter.gte = priceRangeMin;
+    }
+    if (!isNaN(priceRangeMax)) {
+      priceFilter.lte = priceRangeMax;
+    }
+    where.AND.push({ price: priceFilter });
+    delete filters.priceRangeMin;
+    delete filters.priceRangeMax;
+  }
+
   // Handle dynamic filters for product specifications
   const specFilters = Object.entries(filters).map(([key, value]) => ({
     specifications: {
@@ -57,7 +88,7 @@ const getAllProducts = async (query: IProductQuery) => {
           mode: "insensitive",
         },
         value: {
-          contains: value as string,
+          in: (value as string).split(',').map(v => v.trim()),
           mode: "insensitive",
         },
       },
@@ -65,7 +96,12 @@ const getAllProducts = async (query: IProductQuery) => {
   }));
 
   if (specFilters.length > 0) {
-    where.AND = specFilters;
+    where.AND.push(...specFilters);
+  }
+
+  // If no conditions in AND, remove it to avoid empty AND clause
+  if (where.AND.length === 0) {
+    delete where.AND;
   }
 
   const products = await prisma.product.findMany({
