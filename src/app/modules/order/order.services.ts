@@ -85,6 +85,19 @@ const createOrderIntoDB = async (payload: IOrder) => {
       },
     });
 
+    // Delete cart items after successful order creation
+    const userCart = await transaction.cart.findUnique({
+      where: { userId },
+    });
+
+    if (userCart) {
+      await transaction.cartItem.deleteMany({
+        where: {
+          cartId: userCart.id,
+        },
+      });
+    }
+
     return updatedOrder;
   });
 
