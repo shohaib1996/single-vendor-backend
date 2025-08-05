@@ -1,5 +1,4 @@
 import prisma from "../../lib/prisma";
-import { IBrand } from "./brand.interface";
 import { ApiError } from "../../errors/ApiError";
 
 const createBrandIntoDB = async (payload: IBrand) => {
