@@ -16,13 +16,45 @@ const createBrandIntoDB = async (payload: IBrand) => {
   return result;
 };
 
-const getAllBrands = async () => {
-  const result = await prisma.brand.findMany({
+import { IBrand, IBrandQuery } from "./brand.interface";
+
+const getAllBrands = async (query: IBrandQuery) => {
+  const { page, limit, searchTerm } = query;
+
+  const pageNumber = parseInt(page as string) || 1;
+  const limitNumber = parseInt(limit as string) || 10;
+  const skip = (pageNumber - 1) * limitNumber;
+
+  const where: any = {};
+
+  if (searchTerm) {
+    where.name = {
+      contains: searchTerm,
+      mode: "insensitive",
+    };
+  }
+
+  const brands = await prisma.brand.findMany({
+    where,
+    skip,
+    take: limitNumber,
     include: {
       categories: true,
     },
   });
-  return result;
+
+  const total = await prisma.brand.count({
+    where,
+  });
+
+  return {
+    meta: {
+      page: pageNumber,
+      limit: limitNumber,
+      total,
+    },
+    data: brands,
+  };
 };
 
 const getSingleBrand = async (id: string) => {

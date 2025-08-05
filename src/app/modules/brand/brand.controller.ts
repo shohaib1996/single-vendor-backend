@@ -13,12 +13,13 @@ const createBrand = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllBrands = catchAsync(async (req: Request, res: Response) => {
-  const result = await BrandServices.getAllBrands();
+  const result = await BrandServices.getAllBrands(req.query);
 
   res.status(200).json({
     success: true,
     message: "Brands retrieved successfully",
-    data: result,
+    meta: result.meta,
+    data: result.data,
   });
 });
 

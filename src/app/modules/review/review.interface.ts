@@ -6,3 +6,9 @@ export type IReview = {
   productId: string;
   createdAt: Date;
 };
+
+export type IReviewQuery = {
+  page?: string;
+  limit?: string;
+  searchTerm?: string;
+};

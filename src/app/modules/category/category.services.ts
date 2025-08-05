@@ -11,9 +11,11 @@ const createCategoryIntoDB = async (payload: ICategory) => {
 
 const getAllCategories = async () => {
   const result = await prisma.category.findMany({
+    where: {
+      parentId: null, // Only fetch top-level categories
+    },
     include: {
-      children: true,
-      parent: true,
+      children: true, // Still include their direct subcategories
     },
   });
   return result;

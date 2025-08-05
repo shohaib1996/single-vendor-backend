@@ -13,7 +13,7 @@ const createReview = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllReviews = catchAsync(async (req: Request, res: Response) => {
-  const result = await ReviewServices.getAllReviews();
+  const result = await ReviewServices.getAllReviews(req.query);
 
   res.status(200).json({
     success: true,
