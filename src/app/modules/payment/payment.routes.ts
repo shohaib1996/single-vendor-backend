@@ -9,4 +9,7 @@ router.get("/success", PaymentController.paymentSuccess);
 
 router.get("/cancel", PaymentController.paymentCancel);
 
+router.get("/", PaymentController.getAllPayments);
+router.patch("/:id", PaymentController.updatePayment);
+
 export const PaymentRoutes = router;

@@ -1,5 +1,5 @@
 import prisma from "../../lib/prisma";
-import { IOrder } from "./order.interface";
+import { IOrder, IOrderQuery } from "./order.interface";
 import { ApiError } from "../../errors/ApiError";
 import { sendEmail } from "../email/email.utils";
 import { getInvoiceEmailTemplate } from "../email/email.template";
@@ -99,7 +99,7 @@ const createOrderIntoDB = async (payload: IOrder) => {
     }
 
     return updatedOrder;
-  });
+  }, { timeout: 30000 });
 
   // Fetch the full order details for the email
   const fullOrderDetails = await prisma.order.findUnique({
@@ -125,13 +125,54 @@ const createOrderIntoDB = async (payload: IOrder) => {
   return orderData;
 };
 
-const getAllOrders = async (userId?: string) => {
-  const where: any = {};
+
+
+const getAllOrders = async (query: IOrderQuery) => {
+  const { page, limit, userId, searchTerm } = query;
+
+  const pageNumber = parseInt(page as string) || 1;
+  const limitNumber = parseInt(limit as string) || 10;
+  const skip = (pageNumber - 1) * limitNumber;
+
+  const where: any = { AND: [] };
+
   if (userId) {
-    where.userId = userId;
+    where.AND.push({ userId: userId });
   }
-  const result = await prisma.order.findMany({
+
+  if (searchTerm) {
+    where.AND.push({
+      OR: [
+        {
+          userId: {
+            contains: searchTerm,
+            mode: "insensitive",
+          },
+        },
+        {
+          user: {
+            email: {
+              contains: searchTerm,
+              mode: "insensitive",
+            },
+          },
+        },
+      ],
+    });
+  }
+
+  // If no conditions in AND, remove it to avoid empty AND clause
+  if (where.AND.length === 0) {
+    delete where.AND;
+  }
+
+  const orders = await prisma.order.findMany({
     where,
+    skip,
+    take: limitNumber,
+    orderBy: {
+      createdAt: 'desc',
+    },
     include: {
       user: true,
       orderItems: {
@@ -142,7 +183,19 @@ const getAllOrders = async (userId?: string) => {
       payment: true,
     },
   });
-  return result;
+
+  const total = await prisma.order.count({
+    where,
+  });
+
+  return {
+    meta: {
+      page: pageNumber,
+      limit: limitNumber,
+      total,
+    },
+    data: orders,
+  };
 };
 
 const getSingleOrder = async (id: string) => {
@@ -151,10 +204,21 @@ const getSingleOrder = async (id: string) => {
       id,
     },
     include: {
-      user: true,
+      user: {
+        select: {
+          name: true,
+          email: true, 
+          phone: true,
+        }
+      },
       orderItems: {
         include: {
-          product: true,
+          product: {
+            select: {
+              name: true,
+              price: true,
+            }
+          },
         },
       },
       payment: true,

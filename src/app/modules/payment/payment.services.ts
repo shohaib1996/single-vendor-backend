@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import Stripe from "stripe";
 import { PrismaClient, PaymentStatus } from "@prisma/client";
 import config from "../../config";
-
 import { sendEmail } from "../email/email.utils";
 import { getInvoiceEmailTemplate } from "../email/email.template";
+import { IPaymentQuery, IPaymentUpdatePayload } from "./payment.interface";
+import { ApiError } from "../../errors/ApiError";
+import Stripe from "stripe";
 
 const prisma = new PrismaClient();
 
@@ -114,8 +114,112 @@ const getCheckoutResult = async (sessionId: string) => {
   return { session, lineItems };
 };
 
+const getAllPayments = async (query: IPaymentQuery) => {
+  const { page, limit, searchTerm } = query;
+
+  const pageNumber = parseInt(page as string) || 1;
+  const limitNumber = parseInt(limit as string) || 10;
+  const skip = (pageNumber - 1) * limitNumber;
+
+  const where: any = { AND: [] };
+
+  if (searchTerm) {
+    where.AND.push({
+      OR: [
+        {
+          id: {
+            contains: searchTerm,
+            mode: "insensitive",
+          },
+        },
+        {
+          order: {
+            user: {
+              email: {
+                contains: searchTerm,
+                mode: "insensitive",
+              },
+            },
+          },
+        },
+        {
+          order: {
+            user: {
+              name: {
+                contains: searchTerm,
+                mode: "insensitive",
+              },
+            },
+          },
+        },
+      ],
+    });
+  }
+
+  // If no conditions in AND, remove it to avoid empty AND clause
+  if (where.AND.length === 0) {
+    delete where.AND;
+  }
+
+  const payments = await prisma.payment.findMany({
+    where,
+    skip,
+    take: limitNumber,
+    orderBy: {
+      paidAt: 'desc', // Newest payments first
+    },
+    include: {
+      order: {
+        include: {
+          user: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const total = await prisma.payment.count({
+    where,
+  });
+
+  return {
+    meta: {
+      page: pageNumber,
+      limit: limitNumber,
+      total,
+    },
+    data: payments,
+  };
+};
+
+const updatePayment = async (id: string, payload: IPaymentUpdatePayload) => {
+  const isExist = await prisma.payment.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!isExist) {
+    throw new ApiError(404, "Payment not found");
+  }
+
+  const result = await prisma.payment.update({
+    where: {
+      id,
+    },
+    data: payload,
+  });
+  return result;
+};
+
 export const PaymentServices = {
   createCheckoutSession,
   updatePaymentStatus,
   getCheckoutResult,
+  getAllPayments,
+  updatePayment,
 };

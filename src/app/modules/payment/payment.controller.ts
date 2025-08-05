@@ -63,8 +63,32 @@ const paymentCancel = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getAllPayments = catchAsync(async (req: Request, res: Response) => {
+  const result = await PaymentServices.getAllPayments(req.query);
+
+  res.status(200).json({
+    success: true,
+    message: "Payments retrieved successfully",
+    meta: result.meta,
+    data: result.data,
+  });
+});
+
+const updatePayment = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await PaymentServices.updatePayment(id, req.body);
+
+  res.status(200).json({
+    success: true,
+    message: "Payment updated successfully",
+    data: result,
+  });
+});
+
 export const PaymentController = {
   createCheckoutSession,
   paymentSuccess,
   paymentCancel,
+  getAllPayments,
+  updatePayment,
 };
