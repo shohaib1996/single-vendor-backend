@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import bcrypt from "bcrypt";
-import { IUser } from "./user.interface";
+import { IUser, IUserQuery } from "./user.interface";
 import prisma from "../../lib/prisma";
 import { ApiError } from "../../errors/ApiError";
 import { generateToken } from "../../utils/generateToken";
@@ -86,9 +86,78 @@ const getProfile = async (id: string) => {
   return result;
 };
 
+
+
+const getAllUsers = async (query: IUserQuery) => {
+  const { page, limit, searchTerm } = query;
+
+  const pageNumber = parseInt(page as string) || 1;
+  const limitNumber = parseInt(limit as string) || 10;
+  const skip = (pageNumber - 1) * limitNumber;
+
+  const where: any = { AND: [] };
+
+  if (searchTerm) {
+    where.AND.push({
+      OR: [
+        {
+          name: {
+            contains: searchTerm,
+            mode: "insensitive",
+          },
+        },
+        {
+          email: {
+            contains: searchTerm,
+            mode: "insensitive",
+          },
+        },
+      ],
+    });
+  }
+
+  // If no conditions in AND, remove it to avoid empty AND clause
+  if (where.AND.length === 0) {
+    delete where.AND;
+  }
+
+  const users = await prisma.user.findMany({
+    where,
+    skip,
+    take: limitNumber,
+    orderBy: {
+      createdAt: 'desc',
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      address: true,
+      phone: true,
+      avatarUrl: true,
+      createdAt: true,
+    },
+  });
+
+  const total = await prisma.user.count({
+    where,
+  });
+
+  return {
+    meta: {
+      page: pageNumber,
+      limit: limitNumber,
+      total,
+    },
+    data: users,
+  };
+};
+
 export const UserServices = {
   createUserIntoDB,
   loginUser,
   updateUserIntoDB,
-  getProfile
+  getProfile,
+  getAllUsers,
 };

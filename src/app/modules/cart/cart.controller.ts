@@ -25,9 +25,28 @@ const deleteCartItem = catchAsync(async (req: Request, res: Response) => {
   res.status(200).json({ success: true, message: "Cart item deleted" });
 });
 
+const getAllCartItems = catchAsync(async (req: Request, res: Response) => {
+  const user = (req as any).user; // Assuming req.user is populated by auth middleware
+  const query = { ...req.query };
+
+  if (user && user.role !== 'ADMIN') {
+    query.userId = user.id;
+  }
+
+  const result = await CartService.getAllCartItems(query);
+
+  res.status(200).json({
+    success: true,
+    message: "Cart items retrieved successfully",
+    meta: result.meta,
+    data: result.data,
+  });
+});
+
 export const CartController = {
   createCart,
   getCart,
   updateCartItem,
   deleteCartItem,
+  getAllCartItems,
 };

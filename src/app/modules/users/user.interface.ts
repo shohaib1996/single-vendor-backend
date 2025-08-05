@@ -16,3 +16,9 @@ export type IUser = {
   avatarUrl?: string;
   createdAt: Date;
 };
+
+export type IUserQuery = {
+  page?: string;
+  limit?: string;
+  searchTerm?: string;
+};

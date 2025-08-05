@@ -13,13 +13,15 @@ router.post(
   validateRequest(CartValidation.create),
   CartController.createCart
 );
-router.get("/", auth([Role.USER]), CartController.getCart);
+// router.get("/", auth([Role.USER, Role.ADMIN]), CartController.getCart);
 router.patch(
   "/:id",
   auth([Role.USER]),
   validateRequest(CartValidation.update),
   CartController.updateCartItem
 );
-router.delete("/:id", auth([Role.USER]), CartController.deleteCartItem);
+router.delete("/cart-item/:id", auth([Role.USER]), CartController.deleteCartItem);
+
+router.get("/", auth([Role.USER, Role.ADMIN]), CartController.getAllCartItems);
 
 export const CartRoutes = router;

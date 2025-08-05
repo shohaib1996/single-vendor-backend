@@ -8,3 +8,10 @@ export type ICartItemCreatePayload = {
   productId: string;
   quantity: number;
 };
+
+export type ICartQuery = {
+  page?: string;
+  limit?: string;
+  searchTerm?: string;
+  userId?: string; // To filter by user for non-admin users
+};
