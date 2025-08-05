@@ -10,13 +10,32 @@ const createProductIntoDB = async (payload: IProduct) => {
 };
 
 const getAllProducts = async (query: IProductQuery) => {
-  const { page, limit, categoryId, featured, ...filters } = query;
+  const { page, limit, categoryId, featured, searchTerm, ...filters } = query;
 
   const pageNumber = parseInt(page as string) || 1;
   const limitNumber = parseInt(limit as string) || 12;
   const skip = (pageNumber - 1) * limitNumber;
 
   const where: any = { AND: [] };
+
+  if (searchTerm) {
+    where.AND.push({
+      OR: [
+        {
+          name: {
+            contains: searchTerm,
+            mode: "insensitive",
+          },
+        },
+        {
+          description: {
+            contains: searchTerm,
+            mode: "insensitive",
+          },
+        },
+      ],
+    });
+  }
 
   if (featured) {
     where.featured = featured === "true";

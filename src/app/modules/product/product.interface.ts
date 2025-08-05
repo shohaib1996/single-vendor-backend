@@ -23,6 +23,5 @@ export type IProductQuery = {
   brandId?: string;
   featured?: string;
   isDiscountActive?: string;
-  // for dynamic filter
   [key: string]: unknown;
 };

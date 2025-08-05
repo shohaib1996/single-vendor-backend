@@ -8,7 +8,7 @@ const createProductSpecification = catchAsync(async (req: Request, res: Response
 });
 
 const getProductSpecifications = catchAsync(async (req: Request, res: Response) => {
-  const result = await ProductSpecificationService.getProductSpecifications();
+  const result = await ProductSpecificationService.getProductSpecifications(req.query);
   res.status(200).json({ success: true, data: result });
 });
 

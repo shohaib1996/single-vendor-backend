@@ -13,3 +13,9 @@ export type IProductSpecificationUpdatePayload = Partial<{
   value: string;
   productId: string;
 }>;
+
+export type IProductSpecificationQuery = {
+  productId?: string;
+  page?: string;
+  limit?: string;
+};

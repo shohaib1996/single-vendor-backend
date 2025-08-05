@@ -8,7 +8,11 @@ const createProductQuestion = async (payload: ProductQuestion): Promise<ProductQ
 };
 
 const getAllProductQuestions = async (): Promise<ProductQuestion[]> => {
-  const result = await prisma.productQuestion.findMany();
+  const result = await prisma.productQuestion.findMany({
+    include: {
+      answer: true, // Include the answer if it exists
+    },
+  });
   return result;
 };
 
