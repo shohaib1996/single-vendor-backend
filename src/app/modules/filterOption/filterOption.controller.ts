@@ -4,13 +4,16 @@ import { FilterOptionService } from "./filterOption.services";
 
 const createFilterOption = catchAsync(async (req: Request, res: Response) => {
   const result = await FilterOptionService.createFilterOption(req.body);
-  res.status(201).json({ success: true, data: result });
+  if ("count" in result) {
+    res.status(201).json({ success: true, message: `${result.count} filter options created successfully` });
+  } else {
+    res.status(201).json({ success: true, data: result });
+  }
 });
 
 const getFilterOptions = catchAsync(async (req: Request, res: Response) => {
-  const { categoryId } = req.query;
-  const result = await FilterOptionService.getFilterOptions(categoryId as string);
-  res.status(200).json({ success: true, data: result });
+  const result = await FilterOptionService.getFilterOptions(req.query);
+  res.status(200).json({ success: true, ...result });
 });
 
 const getFilterOption = catchAsync(async (req: Request, res: Response) => {

@@ -9,3 +9,12 @@ export type IFilterOptionCreatePayload = {
   unit?: string;
   categoryId: string;
 };
+
+export type IFilterOptionQuery = {
+  page?: string;
+  limit?: string;
+  searchTerm?: string;
+  categoryId?: string;
+};
+
+export type IFilterOptionCreateManyPayload = IFilterOptionCreatePayload[];
