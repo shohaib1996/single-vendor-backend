@@ -14,8 +14,16 @@ const uploadFiles = catchAsync(async (req: Request, res: Response) => {
   }
 
   for (const file of files) {
-    const result = await sendImageToCloudinary(file.filename, file.path);
-    imageUrls.push(result.secure_url as string);
+    try {
+      const result = await sendImageToCloudinary(file.filename, file.path);
+      imageUrls.push(result.secure_url as string);
+    } catch (error) {
+      console.error("Cloudinary Upload Error:", error);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to upload image to Cloudinary",
+      });
+    }
   }
 
   res.status(200).json({
