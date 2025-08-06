@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, Express } from "express";
 import catchAsync from "../../utils/catchAsync";
 import { sendImageToCloudinary } from "./uploader.utils";
 

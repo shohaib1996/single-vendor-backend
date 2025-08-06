@@ -7,6 +7,7 @@
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write .",
+    "lint:fix": "eslint . --fix",
     "build": "tsc",
     "postinstall": "npx prisma migrate deploy && npx prisma generate"
   },
@@ -14,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "description": "",
+  "type": "module",
   "dependencies": {
     "@prisma/client": "^6.12.0",
     "bcrypt": "^6.0.0",

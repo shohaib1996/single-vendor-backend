@@ -69,7 +69,7 @@ const getAllProducts = async (query: IProductQuery) => {
 
   // Handle brand filter
   if (filters.brand) {
-    const brands = (filters.brand as string).split(',').map(b => b.trim());
+    const brands = (filters.brand as string).split(",").map((b) => b.trim());
     where.AND.push({
       brand: {
         name: {
@@ -107,7 +107,7 @@ const getAllProducts = async (query: IProductQuery) => {
           mode: "insensitive",
         },
         value: {
-          in: (value as string).split(',').map(v => v.trim()),
+          in: (value as string).split(",").map((v) => v.trim()),
           mode: "insensitive",
         },
       },

@@ -166,7 +166,7 @@ const getAllPayments = async (query: IPaymentQuery) => {
     skip,
     take: limitNumber,
     orderBy: {
-      paidAt: 'desc', // Newest payments first
+      paidAt: "desc", // Newest payments first
     },
     include: {
       order: {

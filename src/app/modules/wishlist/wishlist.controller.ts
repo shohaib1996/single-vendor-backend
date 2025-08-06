@@ -24,7 +24,7 @@ const getAllWishlistItems = catchAsync(async (req: Request, res: Response) => {
   const user = (req as any).user; // Assuming req.user is populated by auth middleware
   const query = { ...req.query };
 
-  if (user && user.role !== 'ADMIN') {
+  if (user && user.role !== "ADMIN") {
     query.userId = user.id;
   }
 

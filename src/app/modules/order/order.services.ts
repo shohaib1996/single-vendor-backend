@@ -1,5 +1,5 @@
 import prisma from "../../lib/prisma";
-import { IOrder, IOrderQuery } from "./order.interface";
+import { IOrder, IOrderQuery, IOrderUpdatePayload } from "./order.interface";
 import { ApiError } from "../../errors/ApiError";
 import { sendEmail } from "../email/email.utils";
 import { getInvoiceEmailTemplate } from "../email/email.template";
@@ -19,87 +19,90 @@ const createOrderIntoDB = async (payload: IOrder) => {
 
   let total = 0;
 
-  const orderData = await prisma.$transaction(async (transaction) => {
-    const createdOrder = await transaction.order.create({
-      data: {
-        userId,
-        total: 0, // Temporary total, will be updated later
-      },
-    });
-
-    for (const item of orderItems) {
-      const product = await transaction.product.findUnique({
-        where: {
-          id: item.productId,
+  const orderData = await prisma.$transaction(
+    async (transaction) => {
+      const createdOrder = await transaction.order.create({
+        data: {
+          userId,
+          total: 0, // Temporary total, will be updated later
         },
       });
 
-      if (!product) {
-        throw new ApiError(404, `Product with ID ${item.productId} not found`);
+      for (const item of orderItems) {
+        const product = await transaction.product.findUnique({
+          where: {
+            id: item.productId,
+          },
+        });
+
+        if (!product) {
+          throw new ApiError(404, `Product with ID ${item.productId} not found`);
+        }
+
+        if (product.stock < item.quantity) {
+          throw new ApiError(400, `Insufficient stock for product ${product.name}`);
+        }
+
+        await transaction.product.update({
+          where: {
+            id: item.productId,
+          },
+          data: {
+            stock: {
+              decrement: item.quantity,
+            },
+          },
+        });
+
+        await transaction.orderItem.create({
+          data: {
+            orderId: createdOrder.id,
+            productId: item.productId,
+            quantity: item.quantity,
+            price: item.price,
+          },
+        });
+
+        total += item.quantity * item.price;
       }
 
-      if (product.stock < item.quantity) {
-        throw new ApiError(400, `Insufficient stock for product ${product.name}`);
-      }
-
-      await transaction.product.update({
+      // Update the order total
+      const updatedOrder = await transaction.order.update({
         where: {
-          id: item.productId,
+          id: createdOrder.id,
         },
         data: {
-          stock: {
-            decrement: item.quantity,
-          },
+          total,
+        },
+        include: {
+          orderItems: true,
         },
       });
 
-      await transaction.orderItem.create({
+      await transaction.payment.create({
         data: {
           orderId: createdOrder.id,
-          productId: item.productId,
-          quantity: item.quantity,
-          price: item.price,
+          status: "PENDING",
         },
       });
 
-      total += item.quantity * item.price;
-    }
-
-    // Update the order total
-    const updatedOrder = await transaction.order.update({
-      where: {
-        id: createdOrder.id,
-      },
-      data: {
-        total,
-      },
-      include: {
-        orderItems: true,
-      },
-    });
-
-    await transaction.payment.create({
-      data: {
-        orderId: createdOrder.id,
-        status: "PENDING",
-      },
-    });
-
-    // Delete cart items after successful order creation
-    const userCart = await transaction.cart.findUnique({
-      where: { userId },
-    });
-
-    if (userCart) {
-      await transaction.cartItem.deleteMany({
-        where: {
-          cartId: userCart.id,
-        },
+      // Delete cart items after successful order creation
+      const userCart = await transaction.cart.findUnique({
+        where: { userId },
       });
-    }
 
-    return updatedOrder;
-  }, { timeout: 30000 });
+      if (userCart) {
+        await transaction.cartItem.deleteMany({
+          where: {
+            cartId: userCart.id,
+          },
+        });
+      }
+
+      return updatedOrder;
+    },
+    { timeout: 30000 }
+  );
 
   // Fetch the full order details for the email
   const fullOrderDetails = await prisma.order.findUnique({
@@ -124,8 +127,6 @@ const createOrderIntoDB = async (payload: IOrder) => {
 
   return orderData;
 };
-
-
 
 const getAllOrders = async (query: IOrderQuery) => {
   const { page, limit, userId, searchTerm } = query;
@@ -171,7 +172,7 @@ const getAllOrders = async (query: IOrderQuery) => {
     skip,
     take: limitNumber,
     orderBy: {
-      createdAt: 'desc',
+      createdAt: "desc",
     },
     include: {
       user: true,
@@ -207,9 +208,9 @@ const getSingleOrder = async (id: string) => {
       user: {
         select: {
           name: true,
-          email: true, 
+          email: true,
           phone: true,
-        }
+        },
       },
       orderItems: {
         include: {
@@ -217,7 +218,7 @@ const getSingleOrder = async (id: string) => {
             select: {
               name: true,
               price: true,
-            }
+            },
           },
         },
       },
@@ -227,7 +228,7 @@ const getSingleOrder = async (id: string) => {
   return result;
 };
 
-const updateOrder = async (id: string, payload: Partial<IOrder>) => {
+const updateOrder = async (id: string, payload: IOrderUpdatePayload) => {
   const isExist = await prisma.order.findUnique({
     where: {
       id,
@@ -238,8 +239,7 @@ const updateOrder = async (id: string, payload: Partial<IOrder>) => {
     throw new ApiError(404, "Order not found");
   }
 
-  // Exclude userId and orderItems from payload to avoid type conflict
-  const { userId, orderItems, ...updateData } = payload;
+  const { ...updateData } = payload;
 
   const result = await prisma.order.update({
     where: {

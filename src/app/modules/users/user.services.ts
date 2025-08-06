@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import bcrypt from "bcrypt";
 import { IUser, IUserQuery } from "./user.interface";
 import prisma from "../../lib/prisma";
@@ -86,8 +85,6 @@ const getProfile = async (id: string) => {
   return result;
 };
 
-
-
 const getAllUsers = async (query: IUserQuery) => {
   const { page, limit, searchTerm } = query;
 
@@ -126,7 +123,7 @@ const getAllUsers = async (query: IUserQuery) => {
     skip,
     take: limitNumber,
     orderBy: {
-      createdAt: 'desc',
+      createdAt: "desc",
     },
     select: {
       id: true,

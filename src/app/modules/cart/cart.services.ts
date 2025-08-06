@@ -11,7 +11,7 @@ const createCart = async (payload: ICartItemCreatePayload): Promise<ICart> => {
   }
 
   const cartItem = await prisma.cartItem.findFirst({
-    where: { cartId: cart.id, productId},
+    where: { cartId: cart.id, productId },
   });
 
   if (cartItem) {
@@ -38,7 +38,7 @@ const getCart = async (userId: string): Promise<ICart | null> => {
           name: true,
           email: true,
           phone: true,
-        }
+        },
       },
       items: {
         include: {
