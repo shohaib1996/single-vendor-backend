@@ -11,13 +11,29 @@ const getAllProductQuestions = async (): Promise<ProductQuestion[]> => {
   const result = await prisma.productQuestion.findMany({
     include: {
       answer: true, // Include the answer if it exists
+      product: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
     },
   });
   return result;
 };
 
 const getSingleProductQuestion = async (id: string): Promise<ProductQuestion | null> => {
-  const result = await prisma.productQuestion.findUnique({ where: { id } });
+  const result = await prisma.productQuestion.findUnique({
+    where: { id },
+    include: {
+      product: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+  });
   return result;
 };
 

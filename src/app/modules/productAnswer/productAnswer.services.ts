@@ -8,12 +8,39 @@ const createProductAnswer = async (payload: ProductAnswer): Promise<ProductAnswe
 };
 
 const getAllProductAnswers = async (): Promise<ProductAnswer[]> => {
-  const result = await prisma.productAnswer.findMany();
+  const result = await prisma.productAnswer.findMany({
+    include: {
+      question: {
+        include: {
+          product: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  });
   return result;
 };
 
 const getSingleProductAnswer = async (id: string): Promise<ProductAnswer | null> => {
-  const result = await prisma.productAnswer.findUnique({ where: { id } });
+  const result = await prisma.productAnswer.findUnique({
+    where: { id },
+    include: {
+      question: {
+        include: {
+          product: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  });
   return result;
 };
 

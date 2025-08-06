@@ -5,7 +5,9 @@ import { FilterOptionService } from "./filterOption.services";
 const createFilterOption = catchAsync(async (req: Request, res: Response) => {
   const result = await FilterOptionService.createFilterOption(req.body);
   if ("count" in result) {
-    res.status(201).json({ success: true, message: `${result.count} filter options created successfully` });
+    res
+      .status(201)
+      .json({ success: true, message: `${result.count} filter options created successfully` });
   } else {
     res.status(201).json({ success: true, data: result });
   }

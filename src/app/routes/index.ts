@@ -15,6 +15,7 @@ import { FilterOptionRoutes } from "../modules/filterOption/filterOption.routes"
 import { ProductSpecificationRoutes } from "../modules/productSpecification/productSpecification.routes";
 import { WishlistRoutes } from "../modules/wishlist/wishlist.routes";
 import { CartRoutes } from "../modules/cart/cart.routes";
+import { DashboardRoutes } from "../modules/dashboard/dashboard.routes";
 
 const moduleRoutes = [
   {
@@ -68,6 +69,10 @@ const moduleRoutes = [
   {
     path: "/cart",
     route: CartRoutes,
+  },
+  {
+    path: "/dashboard",
+    route: DashboardRoutes,
   },
 ];
 

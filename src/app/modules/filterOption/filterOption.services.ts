@@ -1,7 +1,13 @@
-import { IFilterOption, IFilterOptionCreatePayload, IFilterOptionQuery } from "./filterOption.interface";
+import {
+  IFilterOption,
+  IFilterOptionCreatePayload,
+  IFilterOptionQuery,
+} from "./filterOption.interface";
 import prisma from "../../lib/prisma";
 
-const createFilterOption = async (payload: IFilterOptionCreatePayload | IFilterOptionCreatePayload[]): Promise<IFilterOption | { count: number }> => {
+const createFilterOption = async (
+  payload: IFilterOptionCreatePayload | IFilterOptionCreatePayload[]
+): Promise<IFilterOption | { count: number }> => {
   if (Array.isArray(payload)) {
     const result = await prisma.filterOption.createMany({ data: payload });
     return { count: result.count };

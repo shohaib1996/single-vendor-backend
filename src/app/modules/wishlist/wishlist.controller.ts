@@ -3,11 +3,16 @@ import catchAsync from "../../utils/catchAsync";
 import { WishlistService } from "./wishlist.services";
 
 const createWishlist = catchAsync(async (req: Request, res: Response) => {
-  const result = await WishlistService.createWishlist({
-    ...req.body,
-    userId: req.user!.id,
-  });
-  res.status(201).json({ success: true, data: result });
+  try {
+    const result = await WishlistService.createWishlist({
+      ...req.body,
+      userId: req.user!.id,
+    });
+    res.status(201).json({ success: true, data: result });
+  } catch (error: any) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Something went wrong" });
+  }
 });
 
 const getWishlist = catchAsync(async (req: Request, res: Response) => {

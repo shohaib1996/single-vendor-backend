@@ -22,4 +22,4 @@ export type IOrderQuery = {
   searchTerm?: string;
 };
 
-export type IOrderUpdatePayload = Omit<Partial<IOrder>, 'userId' | 'orderItems'>;
+export type IOrderUpdatePayload = Omit<Partial<IOrder>, "userId" | "orderItems">;
