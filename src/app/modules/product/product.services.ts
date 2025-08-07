@@ -10,7 +10,7 @@ const createProductIntoDB = async (payload: IProduct) => {
 };
 
 const getAllProducts = async (query: IProductQuery) => {
-  const { page, limit, categoryId, featured, searchTerm, ...filters } = query;
+  const { page, limit, categoryId, featured, searchTerm, discounted, ...filters } = query;
 
   const pageNumber = parseInt(page as string) || 1;
   const limitNumber = parseInt(limit as string) || 12;
@@ -39,6 +39,10 @@ const getAllProducts = async (query: IProductQuery) => {
 
   if (featured) {
     where.featured = featured === "true";
+  }
+
+  if (discounted) {
+    where.isDiscountActive = discounted === "true";
   }
 
   if (categoryId) {
