@@ -16,6 +16,7 @@ const getAllCategories = async () => {
     },
     include: {
       children: true, // Still include their direct subcategories
+      brands: true, // Include associated brands
     },
   });
   return result;
@@ -29,6 +30,7 @@ const getSingleCategory = async (id: string) => {
     include: {
       children: true,
       parent: true,
+      brands: true, // Include associated brands
     },
   });
   return result;
@@ -73,10 +75,31 @@ const deleteCategory = async (id: string) => {
   return result;
 };
 
+const getDescendantCategoryIds = async (categoryId: string): Promise<string[]> => {
+  const category = await prisma.category.findUnique({
+    where: { id: categoryId },
+    include: { children: true },
+  });
+
+  if (!category) {
+    return [];
+  }
+
+  let descendantIds: string[] = [category.id];
+  if (category.children && category.children.length > 0) {
+    for (const child of category.children) {
+      const childDescendants = await getDescendantCategoryIds(child.id);
+      descendantIds = descendantIds.concat(childDescendants);
+    }
+  }
+  return descendantIds;
+};
+
 export const CategoryServices = {
   createCategoryIntoDB,
   getAllCategories,
   getSingleCategory,
   updateCategory,
   deleteCategory,
+  getDescendantCategoryIds,
 };
