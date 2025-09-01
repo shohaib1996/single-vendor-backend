@@ -9,7 +9,7 @@
     "format": "prettier --write .",
     "lint:fix": "eslint . --fix",
     "build": "tsc",
-    "postinstall": "npx prisma migrate deploy && npx prisma generate"
+    "postinstall": "npx prisma generate"
   },
   "keywords": [],
   "author": "",
