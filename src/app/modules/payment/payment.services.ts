@@ -95,7 +95,7 @@ const updatePaymentStatus = async (orderId: string, status: PaymentStatus): Prom
 
     if (order) {
       const emailHtml = getInvoiceEmailTemplate(order, "Paid");
-      await sendEmail("batikromeye@gmail.com", "Payment Successful - Your Invoice", emailHtml);
+      await sendEmail(order?.user?.email, "Payment Successful - Your Invoice", emailHtml);
     }
   }
 

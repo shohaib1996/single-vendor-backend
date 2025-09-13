@@ -122,7 +122,7 @@ const createOrderIntoDB = async (payload: IOrder) => {
 
   if (fullOrderDetails) {
     const emailHtml = getInvoiceEmailTemplate(fullOrderDetails, "Pending");
-    await sendEmail("batikromeye@gmail.com", "Your Order Confirmation", emailHtml);
+    await sendEmail(fullOrderDetails?.user?.email, "Your Order Confirmation", emailHtml);
   }
 
   return orderData;
