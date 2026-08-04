@@ -1,6 +1,6 @@
-# 🛒 EcoShop Backend – Single Vendor E-commerce API
+# 🛒 DeviceMart Backend – Single Vendor E-commerce API
 
-This is the backend for **EcoShop**, a modern, single-vendor e-commerce platform. It provides all core functionalities like authentication, product management, cart, wishlist, order handling, and Stripe payments.
+This is the backend for **DeviceMart**, a modern, single-vendor e-commerce platform. It provides all core functionalities like authentication, product management, cart, wishlist, order handling, and Stripe payments.
 
 **Live Frontend**: [eco-shop-nine.vercel.app](https://eco-shop-nine.vercel.app)  
 **Frontend Repo**: [single-vendor-client](https://github.com/shohaib1996/single-vendor-client)
